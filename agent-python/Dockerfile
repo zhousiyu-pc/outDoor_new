@@ -1,0 +1,10 @@
+FROM python:3.12-slim
+WORKDIR /app
+ENV PORT=19081
+ENV HOST=0.0.0.0
+ENV APP_ENV=production
+ENV AGENT_DEMO_MODE=false
+ENV AGENT_DEADLINE_MS=1000
+COPY app ./app
+EXPOSE 19081
+CMD ["python", "app/server.py"]

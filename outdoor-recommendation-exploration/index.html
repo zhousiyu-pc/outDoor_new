@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#dff1ef" />
+    <meta name="description" content="野去，帮你找到适合今天出发的户外路线。" />
+    <title>野去｜今天想怎么走？</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <button class="brand" type="button" data-view="home" aria-label="回到野去首页">
+          <span class="brand-symbol">野</span>
+          <span class="brand-copy"><strong>野去</strong><small>找到今天适合的路</small></span>
+        </button>
+        <div class="topbar-actions">
+          <button class="location-button" type="button" aria-label="当前出发地">
+            <span class="pin-dot" aria-hidden="true"></span>
+            <span>深圳</span>
+            <span class="chevron" aria-hidden="true">⌄</span>
+          </button>
+          <button class="icon-button" type="button" aria-label="打开菜单">☰</button>
+        </div>
+      </header>
+
+      <main>
+        <section class="view is-active" data-page="home" aria-labelledby="home-title">
+          <div class="home-intro">
+            <div>
+              <p class="eyebrow">周末去哪</p>
+              <h1 id="home-title">找条合适的路</h1>
+              <p class="intro-copy">输入需求，开始找路线。</p>
+            </div>
+            <div class="status-card" aria-label="当前推荐范围">
+              <span class="status-light"></span>
+              <span>深圳周边</span>
+              <span class="status-separator">·</span>
+              <span>半天轻户外</span>
+            </div>
+          </div>
+
+          <div class="search-panel">
+            <div class="search-panel-heading">
+              <span class="panel-kicker">找路线</span>
+              <span class="character-count"><span id="query-count">0</span>/120</span>
+            </div>
+            <textarea id="query-input" maxlength="120" placeholder="输入需求"></textarea>
+            <div class="search-panel-footer">
+              <div class="suggestion-row" aria-label="快速输入">
+                <button class="suggestion-chip" type="button" data-query="周末带孩子走一条轻松的自然步道">带孩子走走</button>
+                <button class="suggestion-chip" type="button" data-query="想找半天短线，最好少晒、可以随时折返">少晒短线</button>
+                <button class="suggestion-chip" type="button" data-query="想去看水，路不要太累，停车方便">去看水</button>
+              </div>
+              <button class="primary-button search-button" type="button" data-action="search">找路线 <span aria-hidden="true">→</span></button>
+            </div>
+          </div>
+
+          <div class="home-support-grid">
+            <article class="support-card support-card-dark">
+              <div class="support-icon" aria-hidden="true">↗</div>
+              <div><span class="support-label">先从多个地方找</span><p>公开路线、地图信息和大家分享的线索，都会标明出处。</p></div>
+            </article>
+            <article class="support-card">
+              <div class="support-icon support-icon-sun" aria-hidden="true">✦</div>
+              <div><span class="support-label">出发前看一眼</span><p>停车、厕所、天气和开放状态，变化的信息放在明处。</p></div>
+            </article>
+          </div>
+
+          <section class="home-preview" aria-labelledby="preview-title">
+            <div class="section-heading-row">
+              <div><p class="eyebrow">最近有人这样走</p><h2 id="preview-title">先看一条参考</h2></div>
+              <button class="text-button" type="button" data-view="results">看全部 <span aria-hidden="true">↗</span></button>
+            </div>
+            <button class="preview-route" type="button" data-route="wetland">
+              <span class="route-thumb thumb-wetland" aria-hidden="true"><span class="thumb-label">COASTAL<br />WALK</span></span>
+              <span class="preview-route-copy"><strong>坝光银叶树湿地</strong><small>平路多 · 约 2 小时 · 适合亲子</small><span class="source-line"><span class="source-check">✓</span> 3 天前核验 · 公开路线资料</span></span>
+              <span class="preview-arrow" aria-hidden="true">→</span>
+            </button>
+          </section>
+        </section>
+
+        <section class="view" data-page="results" aria-labelledby="results-title" hidden>
+          <div class="view-header">
+            <button class="back-button" type="button" data-view="home"><span aria-hidden="true">←</span> 换个说法</button>
+            <span class="view-index">SEARCH / 02</span>
+          </div>
+          <div class="results-intro">
+            <div><p class="eyebrow">找到 <span id="result-total">3</span> 条</p><h1 id="results-title">选一条去走</h1></div>
+            <p class="results-query" id="results-query">周末带孩子走一条轻松的自然步道</p>
+          </div>
+          <div class="filter-bar" aria-label="路线筛选">
+            <button class="filter-chip is-selected" type="button" data-filter="all">全部</button>
+            <button class="filter-chip" type="button" data-filter="easy">轻松走</button>
+            <button class="filter-chip" type="button" data-filter="family">带孩子</button>
+            <button class="filter-chip" type="button" data-filter="water">去看水</button>
+            <label class="inline-search"><span aria-hidden="true">⌕</span><input id="route-search" type="search" placeholder="搜地点 / 路线" aria-label="搜索地点或路线" /></label>
+          </div>
+          <div class="route-list" id="route-list"></div>
+          <div class="empty-state" id="empty-state" hidden><span class="empty-icon" aria-hidden="true">⌁</span><h2>还没有找到这类路线</h2><p>换一个感觉，或者先看看全部推荐。</p><button class="secondary-button" type="button" data-reset-filters>回到全部</button></div>
+        </section>
+
+        <section class="view" data-page="detail" aria-labelledby="detail-title" hidden>
+          <div class="view-header">
+            <button class="back-button" type="button" data-view="results"><span aria-hidden="true">←</span> 路线列表</button>
+            <span class="view-index">ROUTE NOTE / 03</span>
+          </div>
+          <div id="detail-root"></div>
+        </section>
+
+        <section class="view" data-page="feedback" aria-labelledby="feedback-title" hidden>
+          <div class="view-header">
+            <button class="back-button" type="button" data-view="detail"><span aria-hidden="true">←</span> 返回路线</button>
+            <span class="view-index">FEEDBACK / 04</span>
+          </div>
+          <div class="feedback-layout">
+            <div class="feedback-intro"><p class="eyebrow">路线反馈</p><h1 id="feedback-title">哪里需要修正？</h1></div>
+            <form class="feedback-form" id="feedback-form">
+              <div class="form-route"><span class="form-label">当前路线</span><strong id="feedback-route-title">坝光银叶树湿地</strong></div>
+              <fieldset><legend>问题</legend><div class="tag-grid"><button type="button" class="tag-button" data-feedback-tag="地址不准">地址不准</button><button type="button" class="tag-button" data-feedback-tag="车程不准">车程不准</button><button type="button" class="tag-button" data-feedback-tag="停车不准">停车不准</button><button type="button" class="tag-button" data-feedback-tag="厕所不准">厕所不准</button><button type="button" class="tag-button" data-feedback-tag="路线封闭">路线封闭</button><button type="button" class="tag-button" data-feedback-tag="不适合孩子">不适合孩子</button></div></fieldset>
+              <label class="form-field"><span class="form-label">备注 <small>选填</small></span><textarea id="feedback-note" maxlength="240" placeholder="写一句就好"></textarea><span class="form-count"><span id="feedback-count">0</span>/240</span></label>
+              <label class="toggle-row"><input id="share-feedback" type="checkbox" checked /><span class="toggle-track"><span></span></span><span>公开分享</span></label>
+              <button class="primary-button" type="submit">提交反馈 <span aria-hidden="true">→</span></button>
+            </form>
+          </div>
+        </section>
+      </main>
+
+      <nav class="bottom-nav" aria-label="主导航">
+        <button class="nav-item is-active" type="button" data-view="home"><span class="nav-icon" aria-hidden="true">⌂</span><span>发现</span></button>
+        <button class="nav-item" type="button" data-view="results"><span class="nav-icon" aria-hidden="true">⌕</span><span>找路线</span></button>
+        <button class="nav-item" type="button" data-view="feedback"><span class="nav-icon" aria-hidden="true">＋</span><span>分享路线</span></button>
+      </nav>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./app.js"></script>
+  </body>
+</html>

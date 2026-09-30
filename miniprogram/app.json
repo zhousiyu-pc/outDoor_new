@@ -1,0 +1,25 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/results/results",
+    "pages/plan-detail/plan-detail",
+    "pages/feedback/feedback"
+  ],
+  "window": {
+    "navigationBarTitleText": "亲子户外推荐",
+    "navigationBarBackgroundColor": "#0e382b",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#edf4ed"
+  },
+  "style": "v2",
+  "requiredPrivateInfos": [
+    "getLocation",
+    "chooseLocation"
+  ],
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于按你当前位置推荐路线，并支持地图选点与导航"
+    }
+  },
+  "lazyCodeLoading": "requiredComponents"
+}

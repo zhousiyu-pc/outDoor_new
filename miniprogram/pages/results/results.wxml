@@ -1,0 +1,26 @@
+<view class="page results-page">
+  <view class="simple-topbar"><button class="back-link" bindtap="goHome" aria-label="返回">←</button><view class="brand-lockup compact"><view class="brand-symbol">野</view><view class="brand-copy"><text class="brand-name">野去</text><text class="brand-tagline">路线</text></view></view></view>
+
+  <view class="results-heading"><view class="eyebrow">找到 {{visiblePlans.length || 0}} 条</view><view class="results-title">选一条去走</view><view wx:if="{{previewMode}}" class="preview-note">预览路线</view><view class="condition-line"><block wx:for="{{summaryHighlights}}" wx:key="*this"><text>{{item}}</text></block><text wx:if="{{departureSummary}}">{{departureSummary}}</text></view></view>
+
+  <view class="filter-bar"><button class="filter-chip {{activeFilter === 'all' ? 'selected' : ''}}" data-filter="all" bindtap="setFilter">全部</button><button class="filter-chip {{activeFilter === 'easy' ? 'selected' : ''}}" data-filter="easy" bindtap="setFilter">轻松</button><button class="filter-chip {{activeFilter === 'family' ? 'selected' : ''}}" data-filter="family" bindtap="setFilter">亲子</button><button class="filter-chip {{activeFilter === 'water' ? 'selected' : ''}}" data-filter="water" bindtap="setFilter">看水</button><view class="inline-search"><text>⌕</text><input value="{{routeSearch}}" placeholder="搜路线" bindinput="onRouteSearch" /></view></view>
+
+  <view wx:if="{{loading}}" class="empty-state"><view class="empty-title">正在找路线</view><view class="empty-copy">请稍候</view></view>
+  <view wx:elif="{{plans.length === 0}}" class="empty-state"><view class="empty-title">{{statusLabel}}</view><view class="empty-copy">{{message}}</view><button class="secondary-button" bindtap="refresh">再找一次</button></view>
+  <view wx:elif="{{visiblePlans.length === 0}}" class="empty-state"><view class="empty-title">没有符合的路线</view><button class="secondary-button" bindtap="resetFilters">看全部</button></view>
+  <view wx:else class="route-list">
+    <block wx:for="{{visiblePlans}}" wx:key="id">
+      <view class="route-card">
+        <view class="route-card-top"><view class="route-meta"><text class="route-source">{{item.sourceLabel || '路线参考'}}</text><text class="route-date"> · {{item.collectedAt || '时间待确认'}}</text></view><view class="route-trust">{{item.trustLabel || '出发前确认'}}</view><button class="save-button {{item.isFavorited ? 'saved' : ''}}" data-id="{{item.id}}" bindtap="favoritePlan" aria-label="{{item.isFavorited ? '取消想去' : '标记想去'}}">{{item.isFavorited ? '♥' : '♡'}}</button></view>
+        <view class="route-title">{{item.title}}</view>
+        <view class="route-facts">
+          <block wx:if="{{item.decisionFacts && item.decisionFacts.length}}"><block wx:for="{{item.decisionFacts}}" wx:for-item="fact" wx:key="key"><view class="route-fact"><text>{{fact.label}}</text><text>{{fact.value || '待确认'}}</text></view></block></block>
+          <block wx:else><view class="route-fact"><text>车程</text><text>{{item.driveTime || '待确认'}}</text></view><view class="route-fact"><text>活动量</text><text>{{item.activity || '待确认'}}</text></view><view class="route-fact"><text>难度</text><text>{{item.difficulty || '待确认'}}</text></view></block>
+        </view>
+        <view wx:if="{{item.reasons.length}}" class="route-reason">{{item.reasons[0]}}</view>
+        <view wx:if="{{item.warningText}}" class="route-warning">注意：{{item.warningText}}</view>
+        <view class="route-actions"><button class="detail-button" data-id="{{item.id}}" bindtap="openPlan">详情</button><button class="adopt-button {{item.isAdopted ? 'done' : ''}}" data-id="{{item.id}}" loading="{{adoptingPlanId === item.id}}" bindtap="adoptPlan">{{item.isAdopted ? '已加入' : '加入'}}</button><button wx:if="{{item.mapAction.available}}" class="map-button" data-id="{{item.id}}" bindtap="openMap">地图</button></view>
+      </view>
+    </block>
+  </view>
+</view>

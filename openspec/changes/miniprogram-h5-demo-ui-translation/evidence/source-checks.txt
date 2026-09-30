@@ -1,0 +1,19 @@
+Source delta: four page WXSS, four page WXML, and one bounded detail-page JS shell-navigation file; business JS/JSON/utils unchanged.
+miniprogram/app.wxss
+miniprogram/pages/feedback/feedback.wxss
+miniprogram/pages/feedback/feedback.wxml
+miniprogram/pages/index/index.wxml
+miniprogram/pages/index/index.wxss
+miniprogram/pages/plan-detail/plan-detail.wxml
+miniprogram/pages/plan-detail/plan-detail.wxss
+miniprogram/pages/plan-detail/plan-detail.js
+miniprogram/pages/results/results.wxml
+miniprogram/pages/results/results.wxss
+JavaScript syntax: PASS for all Mini Program JS files.
+JSON parse: PASS.
+miniprogram/pages/feedback/feedback.wxml: 8 distinct event handlers present in JS; no HTML br tag.
+miniprogram/pages/index/index.wxml: 20 distinct event handlers present in JS; no HTML br tag.
+miniprogram/pages/plan-detail/plan-detail.wxml: 14 distinct event handlers present in JS; no HTML br tag.
+miniprogram/pages/results/results.wxml: 6 distinct event handlers present in JS; no HTML br tag.
+
+Full UI re-entry: home context card, detail route-rhythm / data-limit / preparation panels, and contextual page actions are present in current source. Page links target only existing Mini Program pages.

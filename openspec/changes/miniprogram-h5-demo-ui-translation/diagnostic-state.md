@@ -1,0 +1,13 @@
+# Diagnostic state
+
+diagnostic_required: true
+trigger: repeated_user_negative_feedback_and_insufficient_prior_verification
+pre_execution: done
+post_execution: done
+execution_mode: fallback_local_only
+status: full_ui_translation_verified_native_acceptance_pending
+pre_report: diagnostic-pre.md
+post_report: diagnostic-post.md
+blocker: none_for_local_compiled_output_translation
+independent_review: pending_tool_unavailable
+human_acceptance: 微信开发者工具或真机的整体视觉、安全区及原生交互验收待完成

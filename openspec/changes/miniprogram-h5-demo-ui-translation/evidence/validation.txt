@@ -1,0 +1,29 @@
+COMMAND: python3 /Users/zhousiyu/Documents/软件项目/dev-team/scripts/check-document-baseline.py --project /Users/zhousiyu/Documents/软件项目/户外推进（新）
+EXIT: 0
+pass: document baseline check satisfied with 0 warning(s)
+
+COMMAND: python3 scripts/check_phase_one_docs.py
+EXIT: 0
+phase-one docs: PASS
+
+COMMAND: openspec validate miniprogram-h5-demo-ui-translation --strict
+EXIT: 0
+Change 'miniprogram-h5-demo-ui-translation' is valid
+
+COMMAND: node --check /Users/zhousiyu/Documents/软件项目/户外推进（新）/openspec/changes/miniprogram-h5-demo-ui-translation/evidence/check-layout.cjs
+EXIT: 0
+
+Evidence integrity: current page source SHA-256 values match the report; 3 pre-fix and 84 post-fix cases present.
+
+2026-09-28 copy pass:
+COMMAND: find miniprogram -name '*.js' -print0 | xargs -0 -n1 node --check
+EXIT: 0
+COMMAND: WeChat wcc compile for index/results/plan-detail/feedback WXML and wcsc compile for four page WXSS + app.wxss
+EXIT: 0
+RESULT: all four WXML outputs non-empty; structural simplification pass recompiled WXML 74,371 bytes and WXSS 31,292 bytes
+COMMAND: JSON parse for app.json and four page JSON files
+EXIT: 0
+COMMAND: WXML event binding resolution and no HTML br tags
+EXIT: 0
+RESULT: index 21, results 11, plan-detail 14, feedback 11 distinct bindings; no missing handlers
+LIMIT: existing 84-case browser matrix predates this structural pass; Chrome process could not launch in the current environment, so no new screenshot claim is made. WeChat IDE CLI also could not start its local service (`listen EPERM 127.0.0.1:3799`).

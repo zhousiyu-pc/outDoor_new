@@ -1,0 +1,17 @@
+<view class="page feedback-page">
+  <view class="simple-topbar"><button class="back-link" bindtap="goBack" aria-label="返回">←</button><view class="brand-lockup compact"><view class="brand-symbol">野</view><view class="brand-copy"><text class="brand-name">野去</text><text class="brand-tagline">{{isUploadMode ? '分享路线' : '反馈'}}</text></view></view></view>
+
+  <view class="feedback-heading"><view class="eyebrow">{{isUploadMode ? '补充路线' : '路线反馈'}}</view><view class="feedback-title">{{isUploadMode ? '分享一条路线' : '哪里需要修正？'}}</view></view>
+
+  <view class="feedback-form">
+    <view wx:if="{{!isUploadMode}}" class="route-context"><text>当前路线</text><text class="route-context-value">{{planTitle}}</text></view>
+
+    <block wx:if="{{isUploadMode}}"><view class="form-field"><text>名称</text><input class="text-input" value="{{uploadTitle}}" placeholder="路线名称" bindinput="onUploadTitleInput" /></view><view class="form-field"><text>起点</text><input class="text-input" value="{{uploadStartPoint}}" placeholder="大致区域" bindinput="onUploadStartPointInput" /></view><view class="form-field"><text>终点</text><input class="text-input" value="{{uploadEndPoint}}" placeholder="选填" bindinput="onUploadEndPointInput" /></view></block>
+
+    <view class="form-field"><view class="field-head"><text>{{isUploadMode ? '标签' : '问题'}}</text><text class="optional">可多选</text></view><view class="tag-grid"><block wx:if="{{isUploadMode}}"><block wx:for="{{uploadSceneTags}}" wx:key="value"><button class="tag {{item.active ? 'active' : ''}}" data-value="{{item.value}}" bindtap="toggleTag">{{item.label}}</button></block></block><block wx:else><block wx:for="{{feedbackTags}}" wx:key="value"><button class="tag {{item.active ? 'active' : ''}}" data-value="{{item.value}}" bindtap="toggleTag">{{item.label}}</button></block></block></view></view>
+
+    <view class="form-field"><view class="field-head"><text>备注</text><text class="optional">选填</text></view><textarea class="note-input" value="{{note}}" maxlength="240" placeholder="写一句就好" bindinput="onNoteInput" /><view class="note-count">{{note.length}}/240</view></view>
+    <view class="share-row" bindtap="toggleShare"><view><text>公开分享</text></view><view class="toggle {{shareExperience ? 'on' : ''}}"><view></view></view></view>
+    <button class="submit-button" loading="{{submitting}}" bindtap="submitFeedback">{{isUploadMode ? '提交路线' : '提交反馈'}}</button>
+  </view>
+</view>

@@ -1,0 +1,419 @@
+--- before/pages/feedback/feedback.wxss
++++ after/pages/feedback/feedback.wxss
+@@ -1,3 +1,5 @@
++/* style: v2 gives button:not([size=mini]) a 184px width and auto margins.
++   Page + control classes outrank that selector, including inside sheets. */
+ .page {
+   min-height: 100vh;
+   padding: calc(88rpx + env(safe-area-inset-top)) 30rpx calc(160rpx + env(safe-area-inset-bottom));
+@@ -12,7 +14,8 @@
+   gap: 12rpx;
+ }
+ 
+-.back-link {
++.page .back-link {
++  width: auto;
+   min-height: 54rpx;
+   margin: 0;
+   padding: 0 3rpx;
+@@ -152,7 +155,7 @@
+   margin-top: 13rpx;
+ }
+ 
+-.tag {
++.page .tag {
+   width: auto;
+   min-height: 54rpx;
+   flex: 0 0 auto;
+@@ -167,7 +170,7 @@
+   font-weight: 700;
+ }
+ 
+-.tag.active {
++.page .tag.active {
+   border-color: #176b4e;
+   background: #176b4e;
+   color: #fff;
+@@ -188,7 +191,7 @@
+   margin-bottom: 8rpx;
+ }
+ 
+-.option-row {
++.page .option-row {
+   width: 100%;
+   min-height: 66rpx;
+   margin: 12rpx 0 0;
+@@ -201,7 +204,7 @@
+   font-weight: 700;
+ }
+ 
+-.option-row.active {
++.page .option-row.active {
+   border-color: #bcd7c1;
+   background: #edf5ed;
+   color: #176b4e;
+@@ -223,8 +226,8 @@
+   box-shadow: 0 9rpx 26rpx rgba(21, 35, 30, .12);
+ }
+ 
+-.secondary-action,
+-.primary-action {
++.page .secondary-action,
++.page .primary-action {
+   width: auto;
+   min-height: 66rpx;
+   flex: 1;
+@@ -235,18 +238,18 @@
+   font-weight: 900;
+ }
+ 
+-.secondary-action {
+-  border: 2rpx solid #dfe6de;
+-  background: #fff;
+-  color: #617069;
+-}
+-
+-.primary-action {
++.page .secondary-action {
++  border: 2rpx solid #dfe6de;
++  background: #fff;
++  color: #617069;
++}
++
++.page .primary-action {
+   background: #176b4e;
+   color: #fff;
+ }
+ 
+-.primary-action text {
++.page .primary-action text {
+   margin-left: 9rpx;
+   color: #cce4b5;
+   font-size: 24rpx;
+--- before/pages/index/index.wxml
++++ after/pages/index/index.wxml
+@@ -16,7 +16,10 @@
+ 
+   <view class="hero-section">
+     <view class="eyebrow">WEEKEND OUTDOOR / 01</view>
+-    <view class="hero-title">今天想<br /><text>怎么走？</text></view>
++    <view class="hero-title">
++      <view>今天想</view>
++      <view class="hero-title-accent">怎么走？</view>
++    </view>
+     <view class="hero-subtitle">说说你想要的感觉，我们帮你从可靠的路线里挑几条。信息有出处，不确定的地方也会提前告诉你。</view>
+     <view class="status-card">
+       <text class="status-light"></text>
+--- before/pages/index/index.wxss
++++ after/pages/index/index.wxss
+@@ -1,3 +1,5 @@
++/* style: v2 gives button:not([size=mini]) a 184px width and auto margins.
++   Page + control classes outrank that selector, including inside sheets. */
+ .page {
+   min-height: 100vh;
+   padding: calc(88rpx + env(safe-area-inset-top)) 32rpx calc(72rpx + env(safe-area-inset-bottom));
+@@ -22,7 +24,7 @@
+ .hero-section { padding: 35rpx 2rpx 2rpx; }
+ .eyebrow { margin-bottom: 17rpx; color: #d47745; font-size: 19rpx; font-weight: 800; letter-spacing: 2rpx; line-height: 1.2; }
+ .hero-title { color: #15231e; font-size: 76rpx; font-weight: 800; letter-spacing: -2rpx; line-height: 1.04; }
+-.hero-title text { color: #176b4e; font-family: Georgia, "Songti SC", serif; font-weight: 500; }
++.hero-title-accent { color: #176b4e; font-family: Georgia, "Songti SC", serif; font-weight: 500; }
+ .hero-subtitle { max-width: 660rpx; margin-top: 22rpx; color: #617069; font-size: 27rpx; line-height: 1.68; }
+ .status-card { display: inline-flex; align-items: center; gap: 12rpx; margin-top: 23rpx; padding: 13rpx 17rpx; border: 2rpx solid #dfe6de; border-radius: 999rpx; background: rgba(255,255,255,.65); color: #617069; font-size: 20rpx; }
+ .status-separator { color: #aab4ad; }
+@@ -38,10 +40,10 @@
+ .prompt-section { margin-top: 12rpx; }
+ .prompt-title { color: #8b9690; font-size: 20rpx; font-weight: 700; }
+ .prompt-list { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 11rpx; margin-top: 12rpx; }
+-.prompt-chip { width: auto; min-height: 56rpx; flex: 0 0 auto; align-self: flex-start; margin: 0; padding: 0 17rpx; border: 2rpx solid #dfe6de; border-radius: 999rpx; background: #fbfaf6; color: #617069; font-size: 20rpx; font-weight: 700; line-height: 54rpx; white-space: nowrap; }
+-.prompt-chip.active { border-color: #bcd7c1; background: #dceee0; color: #176b4e; }
+-.search-button { display: flex; width: 100%; min-height: 88rpx; align-self: stretch; margin-top: 20rpx; border-radius: 999rpx; background: #176b4e; color: #fff; box-shadow: 0 12rpx 23rpx rgba(23,107,78,.16); font-size: 27rpx; font-weight: 900; }
+-.search-button text { margin-left: 13rpx; color: #cce4b5; font-size: 36rpx; font-weight: 400; }
++.page .prompt-chip { width: auto; min-height: 56rpx; flex: 0 0 auto; align-self: flex-start; margin: 0; padding: 0 17rpx; border: 2rpx solid #dfe6de; border-radius: 999rpx; background: #fbfaf6; color: #617069; font-size: 20rpx; font-weight: 700; line-height: 54rpx; white-space: nowrap; }
++.page .prompt-chip.active { border-color: #bcd7c1; background: #dceee0; color: #176b4e; }
++.page .search-button { display: flex; width: 100%; min-height: 88rpx; align-self: stretch; margin: 20rpx 0 0; border-radius: 999rpx; background: #176b4e; color: #fff; box-shadow: 0 12rpx 23rpx rgba(23,107,78,.16); font-size: 27rpx; font-weight: 900; }
++.page .search-button text { margin-left: 13rpx; color: #cce4b5; font-size: 36rpx; font-weight: 400; }
+ 
+ .context-card { padding: 3rpx 22rpx; }
+ .context-item { min-height: 100rpx; gap: 16rpx; }
+@@ -80,11 +82,11 @@
+ .chips { display: grid; gap: 10rpx; }
+ .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+ .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+-.chip { min-height: 63rpx; margin: 0; padding: 0 7rpx; border: 2rpx solid transparent; border-radius: 999rpx; background: #f0f3ee; color: #617069; font-size: 19rpx; font-weight: 700; }
+-.chip.active { border-color: #176b4e; background: #176b4e; color: #fff; }
++.page .chip { width: 100%; min-width: 0; min-height: 63rpx; margin: 0; padding: 0 7rpx; border: 2rpx solid transparent; border-radius: 999rpx; background: #f0f3ee; color: #617069; font-size: 19rpx; font-weight: 700; }
++.page .chip.active { border-color: #176b4e; background: #176b4e; color: #fff; }
+ .advanced-action-bar { align-items: flex-start; gap: 13rpx; margin-top: 26rpx; padding-top: 20rpx; border-top: 2rpx solid #edf0eb; }
+ .advanced-action-copy { flex: 1; min-width: 0; color: #617069; font-size: 19rpx; line-height: 1.45; }
+-.advanced-search-button { width: auto; flex: 0 0 auto; min-height: 65rpx; padding: 0 17rpx; border-radius: 999rpx; background: #176b4e; color: #fff; font-size: 19rpx; font-weight: 800; }
++.page .advanced-search-button { width: auto; flex: 0 0 auto; min-height: 65rpx; margin: 0; padding: 0 17rpx; border-radius: 999rpx; background: #176b4e; color: #fff; font-size: 19rpx; font-weight: 800; }
+ 
+ .sheet-mask { position: fixed; inset: 0; z-index: 50; display: flex; align-items: flex-end; background: rgba(14, 35, 27, .42); }
+ .departure-sheet { width: 100%; padding: 30rpx 28rpx calc(30rpx + env(safe-area-inset-bottom)); border-radius: 28rpx 28rpx 0 0; background: #fff; box-sizing: border-box; }
+@@ -93,17 +95,17 @@
+ .sheet-subtitle { margin-top: 7rpx; color: #617069; font-size: 20rpx; line-height: 1.5; }
+ .departure-quick-list, .picker-row, .sheet-actions { display: grid; gap: 11rpx; margin-top: 22rpx; }
+ .departure-quick-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+-.departure-chip, .sheet-cancel, .sheet-confirm { min-height: 70rpx; margin: 0; border-radius: 999rpx; background: #f0f3ee; color: #176b4e; font-size: 21rpx; font-weight: 800; }
++.page .departure-chip, .page .sheet-cancel, .page .sheet-confirm { width: 100%; min-width: 0; min-height: 70rpx; margin: 0; border-radius: 999rpx; background: #f0f3ee; color: #176b4e; font-size: 21rpx; font-weight: 800; }
+ .picker-row, .sheet-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+ .picker-box { padding: 17rpx; border-radius: 14rpx; background: #f5f7f2; }
+ .picker-label { color: #8b9690; font-size: 18rpx; font-weight: 700; }
+ .picker-value { margin-top: 7rpx; color: #15231e; font-size: 23rpx; font-weight: 800; }
+-.sheet-cancel { border: 2rpx solid #dfe6de; background: #fff; color: #617069; }
+-.sheet-confirm { background: #176b4e; color: #fff; }
++.page .sheet-cancel { border: 2rpx solid #dfe6de; background: #fff; color: #617069; }
++.page .sheet-confirm { background: #176b4e; color: #fff; }
+ 
+ @media (max-width: 360px) {
+   .page { padding-right: 24rpx; padding-left: 24rpx; }
+   .prompt-list { gap: 8rpx; }
+-  .prompt-chip { padding: 0 12rpx; font-size: 18rpx; }
++  .page .prompt-chip { padding: 0 12rpx; font-size: 18rpx; }
+   .secondary-row { align-items: flex-start; flex-direction: column; }
+ }
+--- before/pages/plan-detail/plan-detail.wxml
++++ after/pages/plan-detail/plan-detail.wxml
+@@ -24,7 +24,7 @@
+ 
+     <view class="detail-hero">
+       <view class="hero-art {{mapReady ? 'art-ready' : 'art-pending'}}">
+-<view class="art-label">路线<br />详情</view>
++<view class="art-label"><view>路线</view><view>详情</view></view>
+ <view class="art-sun">
+ </view>
+ <view class="art-hill">
+--- before/pages/plan-detail/plan-detail.wxss
++++ after/pages/plan-detail/plan-detail.wxss
+@@ -1,3 +1,5 @@
++/* style: v2 gives button:not([size=mini]) a 184px width and auto margins.
++   Page + control classes outrank that selector, including inside sheets. */
+ .page {
+   min-height: 100vh;
+   padding: calc(88rpx + env(safe-area-inset-top)) 30rpx calc(150rpx + env(safe-area-inset-bottom));
+@@ -20,8 +22,9 @@
+   gap: 12rpx;
+ }
+ 
+-.back-link,
+-.share-link {
++.page .back-link,
++.page .share-link {
++  width: auto;
+   min-height: 54rpx;
+   margin: 0;
+   padding: 0 3rpx;
+@@ -31,7 +34,7 @@
+   font-weight: 800;
+ }
+ 
+-.share-link text {
++.page .share-link text {
+   margin-left: 6rpx;
+   color: #d47745;
+ }
+@@ -286,8 +289,8 @@
+   margin-top: 15rpx;
+ }
+ 
+-.primary-small,
+-.secondary-action {
++.page .primary-small,
++.page .secondary-action {
+   width: auto;
+   min-width: 0;
+   min-height: 62rpx;
+@@ -299,22 +302,22 @@
+   font-weight: 800;
+ }
+ 
+-.primary-small {
++.page .primary-small {
+   background: #176b4e;
+   color: #fff;
+ }
+ 
+-.decision-panel .primary-small {
++.page .decision-panel .primary-small {
+   background: #dceec7;
+   color: #0e382b;
+ }
+ 
+-.secondary-action {
++.page .secondary-action {
+   background: #f0f3ee;
+   color: #176b4e;
+ }
+ 
+-.decision-panel .secondary-action {
++.page .decision-panel .secondary-action {
+   border: 2rpx solid rgba(242, 247, 236, .2);
+   background: transparent;
+   color: #f2f7ec;
+@@ -482,7 +485,7 @@
+   line-height: 1.55;
+ }
+ 
+-.feedback-button {
++.page .feedback-button {
+   width: auto;
+   min-height: 60rpx;
+   margin: 13rpx 0 0;
+@@ -495,7 +498,7 @@
+   font-weight: 800;
+ }
+ 
+-.feedback-button text {
++.page .feedback-button text {
+   margin-left: 8rpx;
+   color: #d47745;
+ }
+@@ -519,7 +522,8 @@
+   min-width: 0;
+ }
+ 
+-.favorite-action {
++.page .favorite-action {
++  width: auto;
+   min-height: 62rpx;
+   flex: 1;
+   margin: 0;
+@@ -531,7 +535,7 @@
+   font-weight: 800;
+ }
+ 
+-.favorite-action.active {
++.page .favorite-action.active {
+   background: #fbf0e9;
+   color: #a95832;
+ }
+@@ -564,7 +568,7 @@
+   line-height: 1.55;
+ }
+ 
+-.empty-state .primary-action {
++.page .empty-state .primary-action {
+   width: auto;
+   min-width: 260rpx;
+   min-height: 66rpx;
+@@ -622,9 +626,11 @@
+   grid-template-columns: repeat(3, minmax(0, 1fr));
+ }
+ 
+-.departure-chip,
+-.sheet-cancel,
+-.sheet-confirm {
++.page .departure-chip,
++.page .sheet-cancel,
++.page .sheet-confirm {
++  width: 100%;
++  min-width: 0;
+   min-height: 66rpx;
+   margin: 0;
+   padding: 0 10rpx;
+@@ -658,13 +664,13 @@
+   font-weight: 800;
+ }
+ 
+-.sheet-cancel {
++.page .sheet-cancel {
+   border: 2rpx solid #dfe6de;
+   background: #fff;
+   color: #617069;
+ }
+ 
+-.sheet-confirm {
++.page .sheet-confirm {
+   background: #176b4e;
+   color: #fff;
+ }
+--- before/pages/results/results.wxss
++++ after/pages/results/results.wxss
+@@ -1,3 +1,5 @@
++/* style: v2 gives button:not([size=mini]) a 184px width and auto margins.
++   Page + control classes outrank that selector, including inside sheets. */
+ .page {
+   min-height: 100vh;
+   padding: calc(88rpx + env(safe-area-inset-top)) 32rpx calc(64rpx + env(safe-area-inset-bottom));
+@@ -57,7 +59,8 @@
+   font-size: 18rpx;
+ }
+ 
+-.back-link {
++.page .back-link {
++  width: auto;
+   margin: 0;
+   padding: 0 4rpx;
+   background: transparent;
+@@ -66,7 +69,7 @@
+   font-weight: 800;
+ }
+ 
+-.back-link text {
++.page .back-link text {
+   margin-left: 7rpx;
+   color: #d47745;
+   font-size: 27rpx;
+@@ -239,7 +242,7 @@
+   letter-spacing: 2rpx;
+ }
+ 
+-.save-button {
++.page .save-button {
+   position: absolute;
+   z-index: 8;
+   top: 14rpx;
+@@ -452,9 +455,9 @@
+   gap: 9rpx;
+ }
+ 
+-.adopt-button,
+-.detail-button,
+-.map-button {
++.page .adopt-button,
++.page .detail-button,
++.page .map-button {
+   width: auto;
+   min-height: 66rpx;
+   margin: 0;
+@@ -464,25 +467,25 @@
+   font-weight: 800;
+ }
+ 
+-.adopt-button {
++.page .adopt-button {
+   flex: 1 1 250rpx;
+   background: #176b4e;
+   color: #fff;
+ }
+ 
+-.adopt-button.done {
++.page .adopt-button.done {
+   background: #0e382b;
+ }
+ 
+-.detail-button,
+-.map-button {
++.page .detail-button,
++.page .map-button {
+   flex: 1 1 150rpx;
+   border: 2rpx solid #dfe6de;
+   background: #fff;
+   color: #176b4e;
+ }
+ 
+-.detail-button text {
++.page .detail-button text {
+   margin-left: 7rpx;
+   color: #d47745;
+   font-size: 23rpx;
+@@ -535,7 +538,7 @@
+   font-size: 19rpx;
+ }
+ 
+-.secondary-button {
++.page .secondary-button {
+   width: auto;
+   min-width: 220rpx;
+   min-height: 66rpx;

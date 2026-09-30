@@ -1,0 +1,20 @@
+<view class="page detail-page">
+  <view class="simple-topbar"><button class="back-link" bindtap="backResults" aria-label="返回">←</button><view class="brand-lockup compact"><view class="brand-symbol">野</view><view class="brand-copy"><text class="brand-name">野去</text><text class="brand-tagline">路线详情</text></view></view></view>
+
+  <view wx:if="{{loading}}" class="empty-state"><view class="empty-title">正在加载</view></view>
+  <view wx:elif="{{notFound}}" class="empty-state"><view class="empty-title">找不到这条路线</view><button class="primary-button" bindtap="backResults">返回列表</button></view>
+  <block wx:else>
+    <view wx:if="{{fallbackNotice}}" class="notice-line">{{fallbackNotice}}</view>
+    <view class="detail-heading"><view class="eyebrow">{{plan.sourceLabel || '路线参考'}}</view><view class="detail-title">{{plan.title}}</view><view class="detail-summary">{{travelPlanView.reason}}</view><view class="detail-source">{{plan.collectedAt || '信息待核验'}} · {{plan.sourceLabel || '公开资料'}}</view></view>
+
+    <view class="fact-row"><view><text>车程</text><text class="fact-value">{{plan.driveTime || '待确认'}}</text></view><view><text>时长</text><text class="fact-value">{{travelPlanView.stayDuration || '半天'}}</text></view><view><text>难度</text><text class="fact-value">{{plan.difficulty || '轻松'}}</text></view></view>
+
+    <view class="detail-section"><view class="section-title">出发前确认</view><view class="confirm-list"><block wx:for="{{mustConfirmItems}}" wx:key="*this"><view><text>·</text>{{item}}</view></block><block wx:for="{{travelPlanView.riskItems}}" wx:key="key"><view><text>·</text>{{item.contentText}}</view></block><block wx:for="{{carryItems}}" wx:key="*this"><view><text>·</text>{{item}}</view></block></view><button class="change-time-link" bindtap="openDeparturePicker">改时间 <text>↗</text></button></view>
+
+    <view class="detail-section"><view class="section-title">参考走法</view><view class="schedule-list"><block wx:for="{{travelPlanView.scheduleItems}}" wx:key="key"><view class="schedule-item"><text class="schedule-time">{{item.timeText}}</text><view><text class="schedule-title">{{item.titleText}}</text><text>{{item.contentText}}</text></view></view></block></view></view>
+
+    <view class="detail-actions"><button class="secondary-button" bindtap="openFeedback">纠错</button><button wx:if="{{mapReady}}" class="secondary-button" bindtap="openMap">地图</button><button class="primary-button {{plan.isFavorited ? 'saved' : ''}}" bindtap="toggleFavorite">{{favoriteText}}</button></view>
+  </block>
+
+  <view wx:if="{{showDeparturePicker}}" class="sheet-mask" bindtap="closeDeparturePicker"><view class="departure-sheet" catchtap="noop"><view class="sheet-title">出发时间</view><view class="departure-quick-list"><button class="departure-chip" data-value="NOW" bindtap="selectQuickDeparture">现在</button><button class="departure-chip" data-value="TODAY_PM" bindtap="selectQuickDeparture">今天下午</button><button class="departure-chip" data-value="TOMORROW_AM" bindtap="selectQuickDeparture">明天上午</button></view><view class="picker-row"><view class="picker-box"><text>日期</text><picker mode="date" value="{{customDepartureDate}}" bindchange="onDepartureDateChange"><view>{{customDepartureDate}}</view></picker></view><view class="picker-box"><text>时间</text><picker mode="time" value="{{customDepartureTime}}" bindchange="onDepartureTimeChange"><view>{{customDepartureTime}}</view></picker></view></view><view class="sheet-actions"><button class="sheet-cancel" bindtap="closeDeparturePicker">取消</button><button class="sheet-confirm" bindtap="confirmCustomDeparture">确定</button></view></view></view>
+</view>
