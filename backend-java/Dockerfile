@@ -1,8 +1,12 @@
-# Build the JAR locally before creating an image. This does not install dependencies.
-# Production remains blocked until authentication, source and MySQL gates are complete.
+FROM maven:3.9.9-eclipse-temurin-17 AS build
+WORKDIR /workspace
+COPY pom.xml ./pom.xml
+COPY src ./src
+RUN mvn --batch-mode --no-transfer-progress package
+
 FROM eclipse-temurin:17-jre
 WORKDIR /app
-COPY target/outdoor-business-0.1.0.jar app.jar
+COPY --from=build /workspace/target/outdoor-business-0.1.0.jar app.jar
 ENV PORT=18080 BIND_ADDRESS=0.0.0.0
 EXPOSE 18080
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]

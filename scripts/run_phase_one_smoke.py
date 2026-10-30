@@ -137,7 +137,7 @@ def run_smoke(workdir, stack):
         agent_process, agent_base = start_agent()
         java_process, base = start_java(agent_base)
         search_path = "/api/v1/user/search/recommendations"
-        search_body = {"query": "附近找条轻松绿道", "originLabel": "深圳", "city": "深圳",
+        search_body = {"query": "深圳附近找条轻松徒步绿道", "originLabel": "深圳", "city": "深圳",
                        "duration": "半天", "difficulty": "轻松", "safetyNeeds": ["厕所方便"]}
         result = request(base + search_path, search_body, key="smoke-search")
         check(result.get("status") == "NO_SEARCH_RESULTS" and result.get("items") == [], "default Agent must return no fabricated routes")

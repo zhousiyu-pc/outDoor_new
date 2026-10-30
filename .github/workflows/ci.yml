@@ -1,0 +1,202 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  governance:
+    name: Governance and documentation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install OpenSpec CLI
+        run: npm install --global @fission-ai/openspec@1.3.1
+      - name: Validate changed OpenSpec changes and patch
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PUSH_BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          set -euo pipefail
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            base="$PR_BASE_SHA"
+          else
+            base="$PUSH_BEFORE_SHA"
+          fi
+          if [[ "$base" =~ ^0+$ ]]; then
+            base=$(git hash-object -t tree /dev/null)
+          fi
+          git diff --check "$base" "$GITHUB_SHA"
+          mapfile -t changes < <(git diff --name-only "$base" "$GITHUB_SHA" -- 'openspec/changes/*' \
+            | awk -F/ 'NF >= 4 && $3 != "archive" {print $3}' | sort -u)
+          if [[ "${#changes[@]}" -eq 0 ]]; then
+            echo 'No OpenSpec change directory changed.'
+            exit 0
+          fi
+          for change in "${changes[@]}"; do
+            if [[ ! -d "openspec/changes/$change" ]]; then
+              echo "Skipping removed change: $change"
+              continue
+            fi
+            echo "Validating $change"
+            openspec validate "$change" --strict --no-interactive
+            if [[ -f "openspec/changes/$change/.openspec.yaml" ]] && \
+                grep -Eq '^schema:[[:space:]]*governance[[:space:]]*$' "openspec/changes/$change/.openspec.yaml"; then
+              python3 scripts/check-target-governance.py --project . --change "$change" --json
+            fi
+          done
+      - name: Check phase-one documentation
+        run: python3 scripts/check_phase_one_docs.py
+      - name: Check project document baseline
+        run: python3 scripts/check-document-baseline.py --project .
+
+  java:
+    name: Java tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - name: Run Java verification
+        shell: bash
+        run: mvn --batch-mode --no-transfer-progress -f backend-java/pom.xml verify 2>&1 | tee java-test.log
+      - name: Upload Java test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: java-test-log-${{ github.sha }}
+          path: java-test.log
+
+  python-agent:
+    name: Python Agent tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: agent-python/requirements.lock.txt
+      - name: Install locked Agent dependencies
+        run: python -m pip install --requirement agent-python/requirements.lock.txt
+      - name: Run Agent tests
+        shell: bash
+        env:
+          RUN_AGENT_HTTP_TESTS: '1'
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python -m unittest discover -s agent-python/tests -v 2>&1 | tee python-test.log
+      - name: Upload Agent test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-test-log-${{ github.sha }}
+          path: python-test.log
+
+  mini-program:
+    name: Mini Program tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Check JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' file; do node --check "$file"; done < <(find miniprogram -name '*.js' -print0)
+      - name: Check JSON syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' file; do node -e 'JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))' "$file"; done < <(find miniprogram -name '*.json' -print0)
+      - name: Run Mini Program contract tests
+        shell: bash
+        run: node --test miniprogram/tests/*.cjs 2>&1 | tee miniprogram-test.log
+      - name: Upload Mini Program test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: miniprogram-test-log-${{ github.sha }}
+          path: miniprogram-test.log
+
+  cross-service:
+    name: Cross-service smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [java, python-agent]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: agent-python/requirements.lock.txt
+      - name: Install Agent dependencies
+        run: python -m pip install --requirement agent-python/requirements.lock.txt
+      - name: Run isolated Java and Agent smoke
+        shell: bash
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python3 scripts/run_phase_one_smoke.py 2>&1 | tee cross-service-smoke.log
+      - name: Upload cross-service smoke log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cross-service-smoke-${{ github.sha }}
+          path: cross-service-smoke.log
+
+  container-build:
+    name: Container build (no push)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    needs: [governance, java, python-agent, mini-program, cross-service]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build Java image without pushing
+        uses: docker/build-push-action@v6
+        with:
+          context: backend-java
+          file: backend-java/Dockerfile
+          push: false
+          tags: outdoor-business:ci-${{ github.sha }}
+          provenance: false
+          sbom: false
+      - name: Build Agent image without pushing
+        uses: docker/build-push-action@v6
+        with:
+          context: agent-python
+          file: agent-python/Dockerfile
+          push: false
+          tags: outdoor-agent:ci-${{ github.sha }}
+          provenance: false
+          sbom: false
